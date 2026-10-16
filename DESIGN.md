@@ -2,6 +2,8 @@
 
 Extracted from the final source (`src/styles.css`, `src/components/*.tsx`, `src/content/*.ts`, `index.html`) after the last correction. Rendered facts below were confirmed in Chromium through the taste probe and the interaction suite recorded in `artifacts/validation.md`; WebKit could not launch on the revision machine, so WebKit facts from the first round are not re-confirmed.
 
+Revision 2 changes only the brief output link's visible label to **Open a job** (`src/components/BriefBuilder.tsx:164`), matching Resources. The existing colors, typography, spacing, components and breakpoints below remain in use. The current scoped checks are recorded in `artifacts/validation.md`; earlier broad observations below are retained from revision 1 and are not claims of a new full audit.
+
 ## Overview
 
 The audience is Identity.md holders who want to brief the agent swarm. The character is warm, plain and encouraging: a cream page, near-black text, one burnt-orange accent used for the single primary action and small marks, and hand-drawn-looking SVG illustrations in the same four colours. The one piece of photographic media is the real swarm-produced film in Examples, shown in a plain 16:9 player with its own poster frame. Hierarchy comes from a six-step type scale and three weights, not from boxes. Surfaces are white cards with a 1px border on the cream page; alternating sections use a soft peach background to separate groups without lines.
@@ -57,6 +59,8 @@ Spacing scale on a 4px base: `--space-1` 4px through `--space-8` 64px (4, 8, 12,
 Grids: `.grid-2` becomes two columns at 40rem, `.grid-3` three columns at 56rem; `.resource-list` two columns at 40rem; `.phase-strip` is always four columns. The guide's `.progress` row is a wrapping flex row: the bar keeps at least 6rem and the Reset button drops to a second line when the count, bar and button no longer fit (at 320 in wide fallback fonts). Two-pane layouts (`.hero-inner`, `.tab-panel`, `.brief-layout`, `.example`) stack on one column and split at 56rem; `.example-reverse` swaps the media side. The hero illustration is hidden below 56rem so the first screen at 390 holds the headline, lede, both actions and the phase strip. The mobile nav is an absolutely positioned panel under the header below 48rem, toggled by `.nav-toggle`; above that width it is an inline row and the toggle is hidden. Breakpoints are in rem and were chosen where the content stops fitting, not from device presets.
 
 Verified in the browser: no horizontal scroll at 320, 390 and 1440; no text overlap; first screen content at 390; the video player fills the media column at 390 (308px wide, 16:9) and sits beside the copy at 1440. Not checked: widths between 600 and 1400 other than at the breakpoints, native 200% zoom, RTL.
+
+Revision 2 additionally checked the brief builder's initial, invalid, composed, copy-status and cleared states at 320, 390, 768 and 1440 wide. At 320, the form and result remain 288px wide with 16px margins; the shorter link retains `.button.button-secondary`, its 44px target height, `white-space: nowrap` and the existing explorer destination. The fix does not clip or hide overflow. At 390 the result actions fit side by side; at 320 they wrap onto separate rows. The 390px first screen still shows the product, both actions and the four-phase strip.
 
 ## Elevation and depth
 

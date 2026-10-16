@@ -161,7 +161,7 @@ export default function BriefBuilder() {
                     Copy brief
                   </button>
                   <a className="button button-secondary" href="https://explorer.imd.fun/launch" target="_blank" rel="noopener noreferrer">
-                    Open a job on the explorer
+                    Open a job
                   </a>
                 </div>
                 <p className="status" role="status">{status}</p>
