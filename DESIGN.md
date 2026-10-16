@@ -1,10 +1,10 @@
 # Design system: Swarm Builder Guide
 
-Extracted from the final source (`src/styles.css`, `src/components/*.tsx`, `index.html`) after the last correction. Rendered facts below were confirmed in Chromium and WebKit through the taste probe and the interaction suite recorded in `artifacts/validation.md`.
+Extracted from the final source (`src/styles.css`, `src/components/*.tsx`, `src/content/*.ts`, `index.html`) after the last correction. Rendered facts below were confirmed in Chromium through the taste probe and the interaction suite recorded in `artifacts/validation.md`; WebKit could not launch on the revision machine, so WebKit facts from the first round are not re-confirmed.
 
 ## Overview
 
-The audience is Identity.md holders who want to brief the agent swarm. The character is warm, plain and encouraging: a cream page, near-black text, one burnt-orange accent used for the single primary action and small marks, and hand-drawn-looking SVG illustrations in the same four colours. Hierarchy comes from a six-step type scale and three weights, not from boxes. Surfaces are white cards with a 1px border on the cream page; alternating sections use a soft peach background to separate groups without lines.
+The audience is Identity.md holders who want to brief the agent swarm. The character is warm, plain and encouraging: a cream page, near-black text, one burnt-orange accent used for the single primary action and small marks, and hand-drawn-looking SVG illustrations in the same four colours. The one piece of photographic media is the real swarm-produced film in Examples, shown in a plain 16:9 player with its own poster frame. Hierarchy comes from a six-step type scale and three weights, not from boxes. Surfaces are white cards with a 1px border on the cream page; alternating sections use a soft peach background to separate groups without lines.
 
 System-wide rules: one page, hash navigation, every section a `.section` inside a `.container`, every card a `.card` or `.example`, one filled accent button per group of actions. One-page arrangements that are not rules: the hero's two-column split, the three-card intro grid and the alternating media side in the examples list.
 
@@ -17,9 +17,9 @@ Defined once in `src/styles.css` `:root`. Primitives are named by hue; component
 | `--color-bg` | `#fff8f0` (`--cream-50`) | Page background, header background (at 92% over blur) |
 | `--color-surface` | `#ffffff` (`--white`) | Cards, inputs, tabs, secondary buttons, phase strip |
 | `--color-surface-alt` | `#ffefe3` (`--cream-100`) | Alternate sections, tip box, checked checklist row, brief text panel, game cells, stats |
-| `--color-surface-tint` | `#ffd9c7` (`--cream-200`) | Storyboard and diagram backgrounds, illustration fills |
+| `--color-surface-tint` | `#ffd9c7` (`--cream-200`) | Diagram background, illustration fills |
 | `--color-border` | `#e8ddd2` (`--cream-300`) | Card, input, tab and section borders, progress track |
-| `--color-text` | `#1b1b1f` (`--ink-900`) | Headings, body, selected tab background, brand mark |
+| `--color-text` | `#1b1b1f` (`--ink-900`) | Headings, body, selected tab background, brand mark, video player letterbox |
 | `--color-text-secondary` | `#57515c` (`--ink-600`) | Ledes, card bodies, hints, captions, footer |
 | `--color-accent` | `#c4400c` (`--orange-600`) | Primary button fill, headline highlight word, phase numbers, icons, progress fill, active game cell |
 | `--color-accent-hover` | `#b0380a` (`--orange-700`) | Primary button hover, inline error text, link hover |
@@ -29,7 +29,7 @@ Defined once in `src/styles.css` `:root`. Primitives are named by hue; component
 
 Measured WCAG 2 contrast of the declared pairs (`test/scratch/contrast.mjs`, not shipped): text on bg 16.3:1, secondary on bg 7.28:1, secondary on surface-alt 6.84:1, secondary on tint 5.85:1, white on accent 5.14:1, accent on bg 4.88:1, accent on surface-alt 4.58:1, accent-hover on surface 5.69:1, success on surface 5.35:1, bg on text 16.3:1. The probe measured every rendered text pair at 4.5:1 or better. There is no dark theme and no status ramp beyond `--color-success`.
 
-Illustrations (`Hero.tsx`, `StoryboardPlayer.tsx`, `Examples.tsx` diagram, `public/favicon.svg`, `public/og.png`) hard-code the same four values (`#1b1b1f`, `#c4400c`, `#fff8f0`, `#ffd9c7`) because SVG attributes cannot read custom properties reliably; keep them in step with the tokens.
+Illustrations (`Hero.tsx`, `Examples.tsx` diagram, `public/favicon.svg`, `public/og.png`) hard-code the same four values (`#1b1b1f`, `#c4400c`, `#fff8f0`, `#ffd9c7`) because SVG attributes cannot read custom properties reliably; keep them in step with the tokens. The video poster (`public/media/wasteland-poster.jpg`) is a frame of the film itself and is not recoloured.
 
 ## Typography
 
@@ -54,20 +54,20 @@ Spacing scale on a 4px base: `--space-1` 4px through `--space-8` 64px (4, 8, 12,
 
 `.container` caps content at `--content-max` 72rem with `--gutter` 16px, growing to 32px at 48rem. The sticky header is `--header-height` 3.5rem; `html { scroll-padding-top }` offsets anchored sections by the header plus 16px (there is no per-section scroll margin).
 
-Grids: `.grid-2` becomes two columns at 40rem, `.grid-3` three columns at 56rem; `.resource-list` two columns at 40rem; `.phase-strip` is always four columns. Two-pane layouts (`.hero-inner`, `.tab-panel`, `.brief-layout`, `.example`) stack on one column and split at 56rem; `.example-reverse` swaps the media side. The hero illustration is hidden below 56rem so the first screen at 390 holds the headline, lede, both actions and the phase strip. The mobile nav is an absolutely positioned panel under the header below 48rem, toggled by `.nav-toggle`; above that width it is an inline row and the toggle is hidden. Breakpoints are in rem and were chosen where the content stops fitting, not from device presets.
+Grids: `.grid-2` becomes two columns at 40rem, `.grid-3` three columns at 56rem; `.resource-list` two columns at 40rem; `.phase-strip` is always four columns. The guide's `.progress` row is a wrapping flex row: the bar keeps at least 6rem and the Reset button drops to a second line when the count, bar and button no longer fit (at 320 in wide fallback fonts). Two-pane layouts (`.hero-inner`, `.tab-panel`, `.brief-layout`, `.example`) stack on one column and split at 56rem; `.example-reverse` swaps the media side. The hero illustration is hidden below 56rem so the first screen at 390 holds the headline, lede, both actions and the phase strip. The mobile nav is an absolutely positioned panel under the header below 48rem, toggled by `.nav-toggle`; above that width it is an inline row and the toggle is hidden. Breakpoints are in rem and were chosen where the content stops fitting, not from device presets.
 
-Verified in the browser: no horizontal scroll at 320, 390 and 1440; no text overlap; first screen content at 390. Not checked: widths between 600 and 1400 other than at the breakpoints, native 200% zoom, RTL.
+Verified in the browser: no horizontal scroll at 320, 390 and 1440; no text overlap; first screen content at 390; the video player fills the media column at 390 (308px wide, 16:9) and sits beside the copy at 1440. Not checked: widths between 600 and 1400 other than at the breakpoints, native 200% zoom, RTL.
 
 ## Elevation and depth
 
-Flat. There are no box shadows. Depth is tonal: cream page, white cards, peach alternate sections, peach-tint illustration panels. Structure borders are 1px `--color-border`. Illustration panels (`.storyboard`, `.diagram`) carry a 1px `rgb(0 0 0 / 0.1)` inset outline as an image edge. The header floats over content with a 92% background and an 8px backdrop blur. Nothing stacks above the header except the skip link (z-index 100) and the open mobile nav, which is part of the header.
+Flat. There are no box shadows. Depth is tonal: cream page, white cards, peach alternate sections, peach-tint illustration panels. Structure borders are 1px `--color-border`. Illustration and media panels (`.diagram`, `.video-player`) carry a 1px `rgb(0 0 0 / 0.1)` inset outline as an image edge; the player's outline is replaced by the 3px focus ring under `:focus-visible`. The header floats over content with a 92% background and an 8px backdrop blur. Nothing stacks above the header except the skip link (z-index 100) and the open mobile nav, which is part of the header.
 
 ## Shapes
 
 | Token | Value | Where |
 | --- | --- | --- |
 | `--radius-sm` | 8px | Inputs, nav links, toggle, game cells, skip link |
-| `--radius-md` | 14px | Checklist rows, tip box, phase strip, brief text panel, storyboard, diagram, resource rows |
+| `--radius-md` | 14px | Checklist rows, tip box, phase strip, brief text panel, video player, diagram, resource rows |
 | `--radius-lg` | 20px | Cards, examples, brief output |
 | `--radius-pill` | 999px | Buttons, tabs, stats, progress bar |
 
@@ -86,9 +86,9 @@ All in `src/components/`. None is a library export; each is a page-level pattern
 - **Progress** (`.progress`): polite count, `role="progressbar"`, accent fill, Reset button disabled at zero.
 - **Checklist** (`.checklist`): native checkboxes inside full-row labels; checked rows tint and strike the title. State persists through `useLocalStorage` under `imd-guide-progress-v1`.
 - **Form field** (`.field`): visible label, optional hint, 44px input, `aria-invalid` and `aria-describedby` to the inline error, validation on submit with focus to the first error. Submit stays enabled.
-- **Brief output** (`.brief-output`): empty state with a bold first line and a next step; filled state shows the brief in `.brief-text` (pre-wrap, body font), Copy and an explorer link, and a `role="status"` line.
+- **Brief output** (`.brief-output`): empty state with a bold first line and a next step; filled state shows the brief in `.brief-text` (pre-wrap, body font), Copy and an explorer link, and a `role="status"` line. Its `h3` has `tabIndex={-1}`: a successful Compose commits the brief with `flushSync`, scrolls the heading to the top of the viewport (the root `scroll-padding-top` keeps it clear of the sticky header) and focuses it, so the result and Copy brief are in view from the bottom of the form at every width. A failed submit focuses the first invalid field instead.
 - **Example** (`.example`): bordered two-pane article with `.example-media` and `.example-copy`; `.kind` is a plain secondary line under the title, not a kicker.
-- **Storyboard player** (`StoryboardPlayer.tsx`): inline SVG frames, Previous/Next/Play with `aria-pressed`, polite caption (off under reduced motion), stops at the last frame. Renders an iframe instead when `videoExample.videoEmbedUrl` is set.
+- **Video player** (`SwarmVideo` in `Examples.tsx`; `.video-figure`, `.video-player`, `.video-caption`): a native `<video controls preload="metadata" playsinline>` whose `src` is the published artifact URL in `src/content/examples.ts` and whose poster is the local `public/media/wasteland-poster.jpg`. The box is held at 16:9 by `aspect-ratio` before anything loads, fills its column, and uses `--color-text` as letterbox. `aria-describedby` points at the description paragraph, which is the text alternative for a film with no words. The figcaption carries the format line and a `role="status"` span that fills in if the stream fails (`onError`). Never autoplays, never loops. Provenance links reuse `.button-small` (one primary, one secondary).
 - **Swarm Catch** (`SwarmCatch.tsx`): nine `button.cell` in a `role="group"`, active cell marked by `data-active`, accent border and a cross-faded icon (opacity, scale 0.25 to 1, blur 4px to 0). Stats in `.stat` pills; one primary Start/Play again or a secondary End round; `role="status"` result. Best score persists under `imd-swarm-catch-best-v1`.
 - **Resource list** (`.resource-list`): bordered rows with a 600-weight link and a secondary description.
 
@@ -96,7 +96,7 @@ Focus: every control uses the global `:focus-visible` 3px `--color-focus` ring w
 
 ## Motion
 
-Only named properties transition (`background-color`, `color`, `border-color`, `scale`, `width`, `opacity`, `filter`), 150ms for state changes and 220ms for the progress fill and cell icon, easing `cubic-bezier(0.2, 0, 0, 1)`. Smooth scrolling is opt-in under `prefers-reduced-motion: no-preference`. Under `reduce`, all transitions collapse to 0.01ms. Nothing loops.
+Only named properties transition (`background-color`, `color`, `border-color`, `scale`, `width`, `opacity`, `filter`), 150ms for state changes and 220ms for the progress fill and cell icon, easing `cubic-bezier(0.2, 0, 0, 1)`. Smooth scrolling is opt-in under `prefers-reduced-motion: no-preference`; the brief builder's scroll to its output follows the same preference through `useReducedMotion` (`smooth` or `auto`). Under `reduce`, all transitions collapse to 0.01ms. Nothing loops, and the video plays only when the visitor presses play.
 
 ## Do's and don'ts
 
@@ -108,5 +108,6 @@ Only named properties transition (`background-color`, `color`, `border-color`, `
 - Do not put a bordered or filled panel inside a `.card` or `.example`; tint the children (as the game cells do) instead.
 - Do not add shadows; the system is flat.
 - Do not add a dark theme, a second accent or a font file without updating this document.
+- Keep large media out of the export: point `src/content/` at a published artifact URL and ship only a poster frame under `public/media/`, as the video example does.
 
 Recipe for one more page section: copy `Tips.tsx`, swap the content file, keep `.grid .grid-2 .grid-3`, add the section to `App.tsx` and a link to `links` in `Header.tsx`.

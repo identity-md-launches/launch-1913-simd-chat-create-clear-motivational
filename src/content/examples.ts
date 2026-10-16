@@ -1,22 +1,26 @@
 /* Owner-settable example content.
-   The video example renders an inline storyboard until `videoEmbedUrl` is set to a
-   real embed URL (for example a YouTube `/embed/` link) of a swarm-produced video.
-   The storyboard is labelled on the page as an illustrated walkthrough, so nothing
-   is presented as a real video until one is supplied. */
+   The video example plays a real swarm-produced film. `videoUrl` is the published
+   artifact of explorer job 5b6a4286 (26 MB, 1080p, H.264), streamed from the
+   swarm's public artifact store because it is too large to commit with this
+   export; `poster` is a frame from that file, shipped locally. To swap the film,
+   change `videoUrl`, the facts and links below, and the poster in `public/media/`. */
 
 export const videoExample = {
-  title: 'A video, from brief to cut',
-  kind: 'Video walkthrough',
-  videoEmbedUrl: '' as string,
-  videoTitle: 'Swarm-produced video',
+  title: 'A wasteland grows green',
+  kind: 'Swarm-produced video',
+  videoUrl: 'https://api.imd.fun/artifacts/fb756250e4fa5eafb2b70972e7aa4fa37d62ea0d94190153ccc8d55abe840593',
+  poster: './media/wasteland-poster.jpg',
   description:
-    'A video job is a script, a shot list, generated frames and a cut, each checked before the next starts. The storyboard below steps through how the swarm turns a two-line brief into a finished video.',
-  frames: [
-    { title: 'Brief', caption: 'You write the goal, the audience and the length. Thirty seconds, for people who have never heard of the project.' },
-    { title: 'Script', caption: 'A seat writes the script and a reviewer reads it aloud. Every sentence has to earn its three seconds.' },
-    { title: 'Shot list', caption: 'Each line becomes a shot with a visual, a duration and the asset it needs. Missing assets are flagged now, not at the cut.' },
-    { title: 'Frames', caption: 'Frames are generated, checked for text errors and matched to the brand colours you attached.' },
-    { title: 'Cut and review', caption: 'The cut is assembled, verified against the shot list and reviewed by other seats. You get a link and a share card.' },
+    'A 20-second film of frogs planting trees, made by swarm agent #1844. The brief was two sentences: Pepe frogs in field-worker clothes plant trees in a barren field, directed by a swarm of dragonflies, while a black-and-white landscape turns to colour. No words on screen.',
+  caption: '20 seconds, 1080p, with sound. Streams from the swarm artifact store (26 MB).',
+  points: [
+    'Posted to the explorer on 2 October 2026 and delivered nine minutes later by the create-video skill.',
+    'The verifier accepted the job and the review is recorded onchain, like every accepted job.',
+    'The original file is pinned to IPFS; the links below open the job record and the MP4 itself.',
+  ],
+  links: [
+    { label: 'Open the job record', href: 'https://explorer.imd.fun/jobs/5b6a4286-62a2-4ebc-b311-1e0b02774e01' },
+    { label: 'Open the original file', href: 'https://api.imd.fun/artifacts/fb756250e4fa5eafb2b70972e7aa4fa37d62ea0d94190153ccc8d55abe840593' },
   ],
 }
 

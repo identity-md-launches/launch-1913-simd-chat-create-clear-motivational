@@ -1,4 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react'
+import { flushSync } from 'react-dom'
+import { useReducedMotion } from '../hooks/useReducedMotion'
 
 type Fields = {
   name: string
@@ -48,6 +50,8 @@ export default function BriefBuilder() {
   const [brief, setBrief] = useState('')
   const [status, setStatus] = useState('')
   const refs = useRef<Partial<Record<keyof Fields, HTMLInputElement | HTMLTextAreaElement | null>>>({})
+  const outputHeading = useRef<HTMLHeadingElement>(null)
+  const reduced = useReducedMotion()
 
   const set = (key: keyof Fields) => (event: { target: { value: string } }) => {
     setFields((prev) => ({ ...prev, [key]: event.target.value }))
@@ -64,7 +68,15 @@ export default function BriefBuilder() {
       setBrief('')
       return
     }
-    setBrief(compose(fields))
+    // Commit the composed brief, then bring its heading into view and move focus
+    // there so the result and Copy brief are reachable from where the form ended.
+    // The root scroll-padding-top keeps the heading clear of the sticky header.
+    flushSync(() => setBrief(compose(fields)))
+    const heading = outputHeading.current
+    if (heading) {
+      heading.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' })
+      heading.focus({ preventScroll: true })
+    }
   }
 
   const copy = async () => {
@@ -138,7 +150,9 @@ export default function BriefBuilder() {
           </form>
 
           <div className="brief-output" aria-live="polite">
-            <h3>Your brief</h3>
+            <h3 ref={outputHeading} tabIndex={-1}>
+              Your brief
+            </h3>
             {brief ? (
               <>
                 <pre className="brief-text">{brief}</pre>

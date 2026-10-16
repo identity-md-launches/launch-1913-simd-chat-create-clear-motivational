@@ -657,6 +657,7 @@ button {
 
 .progress {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
   margin-block: 0 var(--space-4);
@@ -666,6 +667,7 @@ button {
 
 .progress-bar {
   flex: 1 1 auto;
+  min-width: 6rem;
   height: 0.5rem;
   border-radius: var(--radius-pill);
   background: var(--color-border);
@@ -845,73 +847,36 @@ button {
   margin-top: var(--space-4);
 }
 
-.example-note {
-  margin-top: var(--space-3);
-  font-size: var(--text-sm);
-  color: var(--color-text-secondary);
-}
-
 .example-media {
   min-width: 0;
 }
 
-/* Storyboard player */
-.storyboard {
+/* Video player: the browser's own controls over a 16:9 box that keeps its
+   height before the poster or metadata arrives. */
+.video-figure {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.video-player {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
   border-radius: var(--radius-md);
-  overflow: hidden;
-  background: var(--color-surface-tint);
+  background: var(--color-text);
   outline: 1px solid rgb(0 0 0 / 0.1);
   outline-offset: -1px;
 }
 
-.storyboard svg {
-  width: 100%;
-  height: auto;
+.video-player:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
-.storyboard-caption {
-  margin-top: var(--space-3);
-  min-height: 3.2em;
-}
-
-.storyboard-caption strong {
-  display: block;
-}
-
-.storyboard-caption span {
-  color: var(--color-text-secondary);
-  font-size: var(--text-sm);
-}
-
-.storyboard-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
-}
-
-.storyboard-controls .frame-count {
-  margin-inline-start: auto;
+.video-caption {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  font-variant-numeric: tabular-nums;
-}
-
-.video-embed {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  background: var(--color-text);
-}
-
-.video-embed iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
 }
 
 /* Company diagram */

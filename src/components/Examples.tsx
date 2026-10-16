@@ -1,5 +1,5 @@
+import { useState } from 'react'
 import { companyExample, gameExample, videoExample } from '../content/examples'
-import StoryboardPlayer from './StoryboardPlayer'
 import SwarmCatch from './SwarmCatch'
 
 function CompanyDiagram() {
@@ -38,6 +38,36 @@ function CompanyDiagram() {
   )
 }
 
+/* The real swarm-produced film with the browser's own controls. The file streams
+   from the swarm's public artifact store; the poster is a frame shipped locally.
+   If the stream cannot load, the caption says so and the links beside it still
+   open the job record and the original file. */
+function SwarmVideo() {
+  const [failed, setFailed] = useState(false)
+  return (
+    <figure className="video-figure">
+      <video
+        className="video-player"
+        src={videoExample.videoUrl}
+        poster={videoExample.poster}
+        controls
+        preload="metadata"
+        playsInline
+        width={1920}
+        height={1080}
+        aria-describedby="example-video-desc"
+        onError={() => setFailed(true)}
+      >
+        <a href={videoExample.videoUrl}>Open the original MP4</a>
+      </video>
+      <figcaption className="video-caption">
+        <span>{videoExample.caption}</span>
+        <span role="status">{failed ? ' The video could not be loaded from the artifact store. Use the links beside it to open the job or the original file.' : ''}</span>
+      </figcaption>
+    </figure>
+  )
+}
+
 export default function Examples() {
   return (
     <section className="section" id="examples" aria-labelledby="examples-title">
@@ -49,23 +79,24 @@ export default function Examples() {
         <div className="examples-list">
           <article className="example" aria-labelledby="example-video">
             <div className="example-media">
-              {videoExample.videoEmbedUrl ? (
-                <div className="video-embed">
-                  <iframe src={videoExample.videoEmbedUrl} title={videoExample.videoTitle} allow="accelerometer; encrypted-media; picture-in-picture" allowFullScreen loading="lazy" />
-                </div>
-              ) : (
-                <StoryboardPlayer />
-              )}
+              <SwarmVideo />
             </div>
             <div className="example-copy">
               <h3 id="example-video">{videoExample.title}</h3>
               <p className="kind">{videoExample.kind}</p>
-              <p>{videoExample.description}</p>
-              {!videoExample.videoEmbedUrl && (
-                <p className="example-note">
-                  The storyboard is an illustrated walkthrough drawn for this guide. The site owner can replace it with an embedded swarm-produced video.
-                </p>
-              )}
+              <p id="example-video-desc">{videoExample.description}</p>
+              <ul>
+                {videoExample.points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+              <div className="button-row">
+                {videoExample.links.map((link, i) => (
+                  <a key={link.href} className={`button button-small ${i === 0 ? 'button-primary' : 'button-secondary'}`} href={link.href} target="_blank" rel="noopener noreferrer">
+                    {link.label}
+                  </a>
+                ))}
+              </div>
             </div>
           </article>
 
